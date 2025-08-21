@@ -4,17 +4,32 @@
  */
 package view;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.DocGia;
+import model.DocGiaDAO;
+
 /**
  *
  * @author ADMIN
  */
 public class QuanLyDocGiaPanel extends javax.swing.JPanel {
 
+    private DefaultTableModel model;
+    private DocGiaDAO docgiaDao = new DocGiaDAO();
+
     /**
      * Creates new form NewJPanel
      */
     public QuanLyDocGiaPanel() {
         initComponents();
+        String[] tieuđcot = {"Mã", "Họ tên", "Ngày sinh", "Địa chỉ", "SĐT", "Email"};
+        model = new DefaultTableModel(tieuđcot, 0);
+        tblDocGia.setModel(model); //gán model cho tblDocGia
+        loadData();
     }
 
     /**
@@ -37,8 +52,6 @@ public class QuanLyDocGiaPanel extends javax.swing.JPanel {
         txtSdt = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDiachi = new javax.swing.JTextArea();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         dcNgaySinh = new com.toedter.calendar.JDateChooser();
         jPanel2 = new javax.swing.JPanel();
         btnThem = new javax.swing.JButton();
@@ -46,6 +59,8 @@ public class QuanLyDocGiaPanel extends javax.swing.JPanel {
         btnxoa = new javax.swing.JButton();
         btnlammoi = new javax.swing.JButton();
         btntimkiem = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblDocGia = new javax.swing.JTable();
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setText("Họ tên");
@@ -62,7 +77,11 @@ public class QuanLyDocGiaPanel extends javax.swing.JPanel {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel5.setText("Email");
 
-        txtEmail.setText("jTextField1");
+        txtEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtEmailActionPerformed(evt);
+            }
+        });
 
         txtSdt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -74,18 +93,7 @@ public class QuanLyDocGiaPanel extends javax.swing.JPanel {
         txtDiachi.setRows(5);
         jScrollPane1.setViewportView(txtDiachi);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane2.setViewportView(jTable1);
+        dcNgaySinh.setDateFormatString("dd/MM/yyyy");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -94,28 +102,23 @@ public class QuanLyDocGiaPanel extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(119, 119, 119)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtSdt)
-                                    .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txtHoten, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(dcNgaySinh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 6, Short.MAX_VALUE)))
+                        .addGap(119, 119, 119)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtSdt)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtHoten, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(dcNgaySinh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -141,20 +144,43 @@ public class QuanLyDocGiaPanel extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnThem.setText("thêm");
+        btnThem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnThemActionPerformed(evt);
+            }
+        });
 
         btnsua.setText("sửa");
+        btnsua.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnsuaActionPerformed(evt);
+            }
+        });
 
         btnxoa.setText("xoá");
+        btnxoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnxoaActionPerformed(evt);
+            }
+        });
 
         btnlammoi.setText("làm mới");
+        btnlammoi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnlammoiActionPerformed(evt);
+            }
+        });
 
         btntimkiem.setText("tìm kiếm");
+        btntimkiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btntimkiemActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -184,35 +210,110 @@ public class QuanLyDocGiaPanel extends javax.swing.JPanel {
                 .addComponent(btnlammoi)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btntimkiem)
-                .addContainerGap(169, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
+
+        tblDocGia.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tblDocGia.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDocGiaMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tblDocGia);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jScrollPane2)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(9, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(26, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtSdtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSdtActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSdtActionPerformed
+
+    private void tblDocGiaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDocGiaMouseClicked
+        // TODO add your handling code here:
+        int row = tblDocGia.getSelectedRow();
+        if (row != -1) {
+            txtHoten.setText(model.getValueAt(row, 1).toString());
+            dcNgaySinh.setDate(Date.valueOf(model.getValueAt(row, 2).toString()));
+            txtDiachi.setText(model.getValueAt(row, 3).toString());
+            txtSdt.setText(model.getValueAt(row, 4).toString());
+            txtEmail.setText(model.getValueAt(row, 5).toString());
+        }
+    }//GEN-LAST:event_tblDocGiaMouseClicked
+
+    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEmailActionPerformed
+
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
+        // TODO add your handling code here:
+        themDocGia();
+        loadData();
+        lamMoi();
+    }//GEN-LAST:event_btnThemActionPerformed
+
+    private void btnsuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsuaActionPerformed
+        // TODO add your handling code here:
+        suaDocGia();
+        loadData();
+        lamMoi();
+    }//GEN-LAST:event_btnsuaActionPerformed
+
+    private void btnxoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxoaActionPerformed
+        // TODO add your handling code here:
+        xoaDocGia();
+        lamMoi();
+    }//GEN-LAST:event_btnxoaActionPerformed
+
+    private void btntimkiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btntimkiemActionPerformed
+        // TODO add your handling code here:
+        timKiem();
+        lamMoi();
+    }//GEN-LAST:event_btntimkiemActionPerformed
+
+    private void btnlammoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnlammoiActionPerformed
+        // TODO add your handling code here:
+        lamMoi();
+    }//GEN-LAST:event_btnlammoiActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -231,10 +332,143 @@ public class QuanLyDocGiaPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblDocGia;
     private javax.swing.JTextArea txtDiachi;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtHoten;
     private javax.swing.JTextField txtSdt;
     // End of variables declaration//GEN-END:variables
+
+    private void loadData() {
+        model.setRowCount(0);
+        List<DocGia> list = DocGiaDAO.getAll();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        for (DocGia dg : list) {
+            model.addRow(new Object[]{
+                dg.getMaDocGia(), dg.getHoTen(), dg.getNgaySinh(),
+                dg.getDiaChi(), dg.getSoDienThoai(), dg.getEmail()
+            });
+        }
+    }
+
+    private void lamMoi() {
+        txtHoten.setText("");
+        dcNgaySinh.setDate(null);
+        txtDiachi.setText("");
+        txtSdt.setText("");
+        txtEmail.setText("");
+    }
+
+    private void themDocGia() {
+        try {
+            String hoTen = txtHoten.getText();
+            Date ngaySinh = new Date(dcNgaySinh.getDate().getTime());
+            String diaChi = txtDiachi.getText();
+            String sdt = txtSdt.getText();
+            String email = txtEmail.getText();
+            DocGia dg = new DocGia(hoTen, ngaySinh, diaChi, sdt, email);
+            if (docgiaDao.insertDocGia(dg)) {
+                JOptionPane.showMessageDialog(this, "Thêm thành công");
+                loadData();
+                lamMoi();
+            } else {
+                JOptionPane.showMessageDialog(this, "Thêm thất bại");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi dữ liệu");
+            e.printStackTrace();
+        }
+    }
+
+    private void suaDocGia() {
+        int row = tblDocGia.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Chọn độc giả cần sửa");
+
+            return;
+        }
+        try {
+            int ma = (int) model.getValueAt(row, 0);
+            String hoTen = txtHoten.getText();
+            Date ngaySinh = new Date(dcNgaySinh.getDate().getTime());
+            String diaChi = txtDiachi.getText();
+            String sdt = txtSdt.getText();
+            String email = txtEmail.getText();
+
+            DocGia dg = new DocGia(ma, hoTen, ngaySinh, diaChi, sdt, email);
+            if (docgiaDao.updateDocGia(dg)) {
+                JOptionPane.showMessageDialog(this, "Cập nhật thành công");
+                loadData();
+            } else {
+                JOptionPane.showMessageDialog(this, "Cập nhật thất bại");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi dữ liệu");
+        }
+    }
+
+    private void xoaDocGia() {
+        int row = tblDocGia.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Chọn độc giả cần xóa");
+            return;
+        }
+
+        try {
+            int ma = (int) model.getValueAt(row, 0);
+            int traloi = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa độc giả id =" + ma);
+            if (traloi != JOptionPane.YES_OPTION) {
+                return;
+            }
+            if (docgiaDao.deleteDocGia(ma)) {
+                JOptionPane.showMessageDialog(this, "Xóa thành công");
+                loadData();
+                lamMoi();
+            } else {
+                JOptionPane.showMessageDialog(this, "Xóa thất bại");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi dữ liệu");
+        }
+    }
+
+    private void timKiem() {
+        String keyword = txtHoten.getText().trim(); // Loại bỏ khoảng trắng thừa
+
+        // Nếu từ khóa rỗng, hiển thị lại toàn bộ dữ liệu
+        if (keyword.isEmpty()) {
+            loadData();
+            return;
+        }
+
+        try {
+            // Gọi phương thức tìm kiếm từ DAO
+            List<DocGia> list = docgiaDao.searchDocGia(keyword);
+
+            // Xóa tất cả các hàng hiện có trên bảng
+            model.setRowCount(0);
+
+            // Thêm kết quả tìm kiếm vào bảng
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            for (DocGia dg : list) {
+                model.addRow(new Object[]{
+                    dg.getMaDocGia(),
+                    dg.getHoTen(),
+                    sdf.format(dg.getNgaySinh()), // Format ngày tháng
+                    dg.getDiaChi(),
+                    dg.getSoDienThoai(),
+                    dg.getEmail()
+                });
+            }
+
+            // Hiển thị thông báo nếu không tìm thấy kết quả
+            if (list.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy độc giả nào phù hợp với từ khóa: " + keyword, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi tìm kiếm: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
 }

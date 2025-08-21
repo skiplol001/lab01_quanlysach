@@ -4,17 +4,32 @@
  */
 package view;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.DocGia;
+import model.DocGiaDAO;
+
 /**
  *
  * @author lap top
  */
 public class QuanLySachPanel extends javax.swing.JPanel {
 
+    private DefaultTableModel model;
+    private DocGiaDAO docgiaDao = new DocGiaDAO();
+
     /**
      * Creates new form QuanLySachPanel
      */
     public QuanLySachPanel() {
         initComponents();
+        String[] tieuđcot = {"Mã", "Họ tên", "Ngày sinh", "Địa chỉ", "SĐT", "Email"};
+        model = new DefaultTableModel(tieuđcot, 0);
+        tblDocGia.setModel(model); //gán model cho tblDocGia
+        loadData();
     }
 
     /**
@@ -32,7 +47,7 @@ public class QuanLySachPanel extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        txtNam = new com.toedter.calendar.JDateChooser();
         txtTacGia = new javax.swing.JTextField();
         txtTenSach = new javax.swing.JTextField();
         txtTheLoai = new javax.swing.JTextField();
@@ -47,7 +62,7 @@ public class QuanLySachPanel extends javax.swing.JPanel {
         btnThem = new javax.swing.JButton();
         jFileChooser1 = new javax.swing.JFileChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblDocGia = new javax.swing.JTable();
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setText("Tên sách");
@@ -64,18 +79,17 @@ public class QuanLySachPanel extends javax.swing.JPanel {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel5.setText("Số lượng");
 
-        txtTacGia.setText("jTextField1");
-
-        txtTenSach.setText("tên sách");
         txtTenSach.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTenSachActionPerformed(evt);
             }
         });
 
-        txtTheLoai.setText("jTextField1");
-
-        txtSoLuong.setText("jTextField1");
+        txtSoLuong.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSoLuongActionPerformed(evt);
+            }
+        });
 
         jLabel6.setText("jLabel6");
 
@@ -154,7 +168,7 @@ public class QuanLySachPanel extends javax.swing.JPanel {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtTenSach)
                             .addComponent(txtTacGia)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
+                            .addComponent(txtNam, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
                             .addComponent(txtTheLoai)
                             .addComponent(txtSoLuong))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -181,7 +195,7 @@ public class QuanLySachPanel extends javax.swing.JPanel {
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -199,7 +213,7 @@ public class QuanLySachPanel extends javax.swing.JPanel {
                 .addGap(9, 9, 9))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblDocGia.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -210,7 +224,7 @@ public class QuanLySachPanel extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblDocGia);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -239,6 +253,10 @@ public class QuanLySachPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTenSachActionPerformed
 
+    private void txtSoLuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSoLuongActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSoLuongActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnThem;
@@ -246,7 +264,6 @@ public class QuanLySachPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnsua;
     private javax.swing.JButton btntimkiem;
     private javax.swing.JButton btnxoa;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -258,10 +275,144 @@ public class QuanLySachPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblDocGia;
+    private com.toedter.calendar.JDateChooser txtNam;
     private javax.swing.JTextField txtSoLuong;
     private javax.swing.JTextField txtTacGia;
     private javax.swing.JTextField txtTenSach;
     private javax.swing.JTextField txtTheLoai;
     // End of variables declaration//GEN-END:variables
+
+    private void loadData() {
+        model.setRowCount(0);
+        List<DocGia> list = DocGiaDAO.getAll();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        for (DocGia dg : list) {
+            model.addRow(new Object[]{
+                dg.getMaDocGia(), dg.getHoTen(), dg.getNgaySinh(),
+                dg.getDiaChi(), dg.getSoDienThoai(), dg.getEmail()
+            });
+        }
+    }
+
+    private void lamMoi() {
+        txtTacGia.setText("");
+        txtTenSach.setText("");
+        txtNam.setDate(null);
+        txtTheLoai.setText("");
+        txtSoLuong.setText("");
+    }
+
+    private void themDocGia() {
+        try {
+            String Tacgia = txtTacGia.getText();
+            String Tensach = txtTenSach.getText();
+            Date ngaySinh = new Date(txtNam.getDate().getTime());
+            String Theloai = txtTheLoai.getText();
+            String soluong = txtSoLuong.getText();
+            DocGia dg = new DocGia(Tacgia, Tensach, ngaySinh, Theloai, soluong);
+            if (docgiaDao.insertDocGia(dg)) {
+                JOptionPane.showMessageDialog(this, "Thêm thành công");
+                loadData();
+                lamMoi();
+            } else {
+                JOptionPane.showMessageDialog(this, "Thêm thất bại");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi dữ liệu");
+            e.printStackTrace();
+        }
+    }
+
+    private void suaDocGia() {
+        int row = tblDocGia.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Chọn độc giả cần sửa");
+
+            return;
+        }
+        try {
+            int ma = (int) model.getValueAt(row, 0);
+            String hoTen = txtHoten.getText();
+            Date ngaySinh = new Date(dcNgaySinh.getDate().getTime());
+            String diaChi = txtDiachi.getText();
+            String sdt = txtSdt.getText();
+            String email = txtEmail.getText();
+
+            DocGia dg = new DocGia(ma, hoTen, ngaySinh, diaChi, sdt, email);
+            if (docgiaDao.updateDocGia(dg)) {
+                JOptionPane.showMessageDialog(this, "Cập nhật thành công");
+                loadData();
+            } else {
+                JOptionPane.showMessageDialog(this, "Cập nhật thất bại");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi dữ liệu");
+        }
+    }
+
+    private void xoaDocGia() {
+        int row = tblDocGia.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Chọn độc giả cần xóa");
+            return;
+        }
+
+        try {
+            int ma = (int) model.getValueAt(row, 0);
+            int traloi = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa độc giả id =" + ma);
+            if (traloi != JOptionPane.YES_OPTION) {
+                return;
+            }
+            if (docgiaDao.deleteDocGia(ma)) {
+                JOptionPane.showMessageDialog(this, "Xóa thành công");
+                loadData();
+                lamMoi();
+            } else {
+                JOptionPane.showMessageDialog(this, "Xóa thất bại");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi dữ liệu");
+        }
+    }
+
+    private void timKiem() {
+        String keyword = txtTacGia.getText().trim(); // Loại bỏ khoảng trắng thừa
+
+        // Nếu từ khóa rỗng, hiển thị lại toàn bộ dữ liệu
+        if (keyword.isEmpty()) {
+            loadData();
+            return;
+        }
+
+        try {
+            // Gọi phương thức tìm kiếm từ DAO
+            List<DocGia> list = docgiaDao.searchDocGia(keyword);
+
+            // Xóa tất cả các hàng hiện có trên bảng
+            model.setRowCount(0);
+
+            // Thêm kết quả tìm kiếm vào bảng
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            for (DocGia dg : list) {
+                model.addRow(new Object[]{
+                    dg.getMaDocGia(),
+                    dg.getHoTen(),
+                    sdf.format(dg.getNgaySinh()), // Format ngày tháng
+                    dg.getDiaChi(),
+                    dg.getSoDienThoai(),
+                    dg.getEmail()
+                });
+            }
+
+            // Hiển thị thông báo nếu không tìm thấy kết quả
+            if (list.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy độc giả nào phù hợp với từ khóa: " + keyword, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi tìm kiếm: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
 }
