@@ -4,13 +4,16 @@
  */
 package view;
 
+import java.io.File;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import model.DocGia;
-import model.DocGiaDAO;
+import model.Sach;
+import model.SachDAO;
 
 /**
  *
@@ -19,16 +22,16 @@ import model.DocGiaDAO;
 public class QuanLySachPanel extends javax.swing.JPanel {
 
     private DefaultTableModel model;
-    private DocGiaDAO docgiaDao = new DocGiaDAO();
+    private SachDAO sachDao = new SachDAO();
 
     /**
      * Creates new form QuanLySachPanel
      */
     public QuanLySachPanel() {
         initComponents();
-        String[] tieuđcot = {"Mã", "Họ tên", "Ngày sinh", "Địa chỉ", "SĐT", "Email"};
+        String[] tieuđcot = {"mã", "Tên sách", "tác giả", "năm xuất bản", "thể loại", "số lượng"};
         model = new DefaultTableModel(tieuđcot, 0);
-        tblDocGia.setModel(model); //gán model cho tblDocGia
+        tblSach.setModel(model);
         loadData();
     }
 
@@ -53,16 +56,16 @@ public class QuanLySachPanel extends javax.swing.JPanel {
         txtTheLoai = new javax.swing.JTextField();
         txtSoLuong = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
+        lblAnh = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         btntimkiem = new javax.swing.JButton();
         btnlammoi = new javax.swing.JButton();
         btnxoa = new javax.swing.JButton();
         btnsua = new javax.swing.JButton();
         btnThem = new javax.swing.JButton();
-        jFileChooser1 = new javax.swing.JFileChooser();
+        fcChonAnh = new javax.swing.JFileChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblDocGia = new javax.swing.JTable();
+        tblSach = new javax.swing.JTable();
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setText("Tên sách");
@@ -91,7 +94,7 @@ public class QuanLySachPanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel6.setText("jLabel6");
+        lblAnh.setText("jLabel6");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -99,14 +102,14 @@ public class QuanLySachPanel extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))
+                .addComponent(lblAnh, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))
         );
 
         btntimkiem.setText("tìm kiếm");
@@ -150,6 +153,12 @@ public class QuanLySachPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        fcChonAnh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fcChonAnhActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -175,7 +184,7 @@ public class QuanLySachPanel extends javax.swing.JPanel {
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jFileChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(fcChonAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(23, 23, 23))))
@@ -209,11 +218,11 @@ public class QuanLySachPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jFileChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(fcChonAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(9, 9, 9))
         );
 
-        tblDocGia.setModel(new javax.swing.table.DefaultTableModel(
+        tblSach.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -224,7 +233,7 @@ public class QuanLySachPanel extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblDocGia);
+        jScrollPane1.setViewportView(tblSach);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -257,6 +266,34 @@ public class QuanLySachPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSoLuongActionPerformed
 
+    private void fcChonAnhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fcChonAnhActionPerformed
+        // TODO add your handling code here:
+         // Lấy đối tượng JFileChooser từ sự kiện
+    JFileChooser fc = (JFileChooser) evt.getSource();
+    
+    // Kiểm tra xem người dùng đã chấp nhận lựa chọn file hay chưa
+    if (evt.getActionCommand().equals(JFileChooser.APPROVE_SELECTION)) {
+        File file = fc.getSelectedFile();
+        if (file != null) {
+            String filePath = file.getAbsolutePath();
+            
+            // Tạo ImageIcon từ đường dẫn file
+            ImageIcon imageIcon = new ImageIcon(filePath);
+            
+            // Lấy kích thước của JLabel
+            int labelWidth = lblAnh.getWidth();
+            int labelHeight = lblAnh.getHeight();
+            
+            // Thay đổi kích thước ảnh để vừa với JLabel
+            ImageIcon resizedIcon = new ImageIcon(imageIcon.getImage().getScaledInstance(labelWidth, labelHeight, java.awt.Image.SCALE_SMOOTH));
+            
+            // Gán ảnh đã thay đổi kích thước cho JLabel
+            lblAnh.setIcon(resizedIcon);
+            lblAnh.setText(""); // Xóa văn bản "jLabel6"
+        }
+    }
+    }//GEN-LAST:event_fcChonAnhActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnThem;
@@ -264,18 +301,18 @@ public class QuanLySachPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnsua;
     private javax.swing.JButton btntimkiem;
     private javax.swing.JButton btnxoa;
-    private javax.swing.JFileChooser jFileChooser1;
+    private javax.swing.JFileChooser fcChonAnh;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblDocGia;
+    private javax.swing.JLabel lblAnh;
+    private javax.swing.JTable tblSach;
     private com.toedter.calendar.JDateChooser txtNam;
     private javax.swing.JTextField txtSoLuong;
     private javax.swing.JTextField txtTacGia;
@@ -285,62 +322,70 @@ public class QuanLySachPanel extends javax.swing.JPanel {
 
     private void loadData() {
         model.setRowCount(0);
-        List<DocGia> list = DocGiaDAO.getAll();
+        List<Sach> list = sachDao.getAll(); // Gọi phương thức getAll từ SachDAO
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        for (DocGia dg : list) {
+        for (Sach sach : list) {
             model.addRow(new Object[]{
-                dg.getMaDocGia(), dg.getHoTen(), dg.getNgaySinh(),
-                dg.getDiaChi(), dg.getSoDienThoai(), dg.getEmail()
+                sach.getMaSach(),
+                sach.getTenSach(),
+                sach.getTacGia(),
+                sach.getNamXuatBan(),
+                sach.getTheLoai(),
+                sach.getSoLuong()
             });
         }
     }
 
     private void lamMoi() {
-        txtTacGia.setText("");
         txtTenSach.setText("");
+        txtTacGia.setText("");
         txtNam.setDate(null);
         txtTheLoai.setText("");
         txtSoLuong.setText("");
     }
 
-    private void themDocGia() {
+    private void themSach() {
         try {
-            String Tacgia = txtTacGia.getText();
-            String Tensach = txtTenSach.getText();
-            Date ngaySinh = new Date(txtNam.getDate().getTime());
-            String Theloai = txtTheLoai.getText();
-            String soluong = txtSoLuong.getText();
-            DocGia dg = new DocGia(Tacgia, Tensach, ngaySinh, Theloai, soluong);
-            if (docgiaDao.insertDocGia(dg)) {
-                JOptionPane.showMessageDialog(this, "Thêm thành công");
+            // Lấy dữ liệu từ các trường nhập liệu trên form sách
+            String tenSach = txtTenSach.getText();
+            String tacGia = txtTacGia.getText();
+            Date namXuatBan = new Date(txtNam.getDate().getTime());
+            String theLoai = txtTheLoai.getText();
+            int soLuong = Integer.parseInt(txtSoLuong.getText());
+
+            // Tạo đối tượng Sach với dữ liệu đúng
+            Sach sach = new Sach(tenSach, tacGia, namXuatBan, theLoai, soLuong);
+
+            if (sachDao.insertSach(sach)) {
+                JOptionPane.showMessageDialog(this, "Thêm sách thành công");
                 loadData();
                 lamMoi();
             } else {
-                JOptionPane.showMessageDialog(this, "Thêm thất bại");
+                JOptionPane.showMessageDialog(this, "Thêm sách thất bại");
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi dữ liệu");
+            JOptionPane.showMessageDialog(this, "Lỗi dữ liệu. Vui lòng kiểm tra lại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
 
-    private void suaDocGia() {
-        int row = tblDocGia.getSelectedRow();
+    private void suaSach() {
+        int row = tblSach.getSelectedRow();
         if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Chọn độc giả cần sửa");
-
+            JOptionPane.showMessageDialog(this, "Chọn sách cần sửa");
             return;
         }
-        try {
-            int ma = (int) model.getValueAt(row, 0);
-            String hoTen = txtHoten.getText();
-            Date ngaySinh = new Date(dcNgaySinh.getDate().getTime());
-            String diaChi = txtDiachi.getText();
-            String sdt = txtSdt.getText();
-            String email = txtEmail.getText();
 
-            DocGia dg = new DocGia(ma, hoTen, ngaySinh, diaChi, sdt, email);
-            if (docgiaDao.updateDocGia(dg)) {
+        try {
+            int maSach = (int) model.getValueAt(row, 0);
+            String tenSach = txtTenSach.getText();
+            String tacGia = txtTacGia.getText();
+            Date namXuatBan = new Date(txtNam.getDate().getTime());
+            String theLoai = txtTheLoai.getText();
+            int soLuong = Integer.parseInt(txtSoLuong.getText());
+
+            Sach sach = new Sach(maSach, tenSach, tacGia, namXuatBan, theLoai, soLuong);
+            if (sachDao.updateSach(sach)) {
                 JOptionPane.showMessageDialog(this, "Cập nhật thành công");
                 loadData();
             } else {
@@ -351,20 +396,20 @@ public class QuanLySachPanel extends javax.swing.JPanel {
         }
     }
 
-    private void xoaDocGia() {
-        int row = tblDocGia.getSelectedRow();
+    private void xoaSach() {
+        int row = tblSach.getSelectedRow();
         if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Chọn độc giả cần xóa");
+            JOptionPane.showMessageDialog(this, "Chọn sách cần xóa");
             return;
         }
 
         try {
-            int ma = (int) model.getValueAt(row, 0);
-            int traloi = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa độc giả id =" + ma);
+            int maSach = (int) model.getValueAt(row, 0);
+            int traloi = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa sách id =" + maSach);
             if (traloi != JOptionPane.YES_OPTION) {
                 return;
             }
-            if (docgiaDao.deleteDocGia(ma)) {
+            if (sachDao.deleteSach(maSach)) {
                 JOptionPane.showMessageDialog(this, "Xóa thành công");
                 loadData();
                 lamMoi();
@@ -376,40 +421,31 @@ public class QuanLySachPanel extends javax.swing.JPanel {
         }
     }
 
-    private void timKiem() {
-        String keyword = txtTacGia.getText().trim(); // Loại bỏ khoảng trắng thừa
-
-        // Nếu từ khóa rỗng, hiển thị lại toàn bộ dữ liệu
+    private void timKiemSach() {
+        String keyword = txtTenSach.getText().trim();
         if (keyword.isEmpty()) {
             loadData();
             return;
         }
 
         try {
-            // Gọi phương thức tìm kiếm từ DAO
-            List<DocGia> list = docgiaDao.searchDocGia(keyword);
-
-            // Xóa tất cả các hàng hiện có trên bảng
+            List<Sach> list = sachDao.searchSach(keyword);
             model.setRowCount(0);
 
-            // Thêm kết quả tìm kiếm vào bảng
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            for (DocGia dg : list) {
+            for (Sach sach : list) {
                 model.addRow(new Object[]{
-                    dg.getMaDocGia(),
-                    dg.getHoTen(),
-                    sdf.format(dg.getNgaySinh()), // Format ngày tháng
-                    dg.getDiaChi(),
-                    dg.getSoDienThoai(),
-                    dg.getEmail()
+                    sach.getMaSach(),
+                    sach.getTenSach(),
+                    sach.getTacGia(),
+                    sach.getNamXuatBan(),
+                    sach.getTheLoai(),
+                    sach.getSoLuong()
                 });
             }
 
-            // Hiển thị thông báo nếu không tìm thấy kết quả
             if (list.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy độc giả nào phù hợp với từ khóa: " + keyword, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Không tìm thấy sách nào phù hợp với từ khóa: " + keyword, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             }
-
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi khi tìm kiếm: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
