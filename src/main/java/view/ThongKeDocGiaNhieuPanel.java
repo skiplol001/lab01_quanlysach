@@ -2,18 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package lab01;
+package view;
 
 /**
  *
  * @author lap top
  */
-public class ThongKeSachDangMuonPanel extends javax.swing.JPanel {
+public class ThongKeDocGiaNhieuPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form NewJPanel
      */
-    public ThongKeSachDangMuonPanel() {
+    public ThongKeDocGiaNhieuPanel() {
         initComponents();
     }
 

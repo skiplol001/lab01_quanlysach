@@ -1,4 +1,4 @@
-package lab01;
+package view;
 
 
 import javax.swing.*;
