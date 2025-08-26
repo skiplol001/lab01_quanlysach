@@ -18,7 +18,7 @@ public class SachDAO {
                     rs.getInt("MaSach"),
                     rs.getString("TenSach"),
                     rs.getString("TacGia"),
-                    rs.getDate("NamXuatBan"),
+                    rs.getInt("NamXuatBan"),
                     rs.getString("TheLoai"),
                     rs.getInt("SoLuong")
                 );
@@ -37,7 +37,7 @@ public class SachDAO {
              PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, sach.getTenSach());
             ps.setString(2, sach.getTacGia());
-            ps.setDate(3, sach.getNamXuatBan());
+            ps.setInt(3, sach.getNamXuatBan());
             ps.setString(4, sach.getTheLoai());
             ps.setInt(5, sach.getSoLuong());
             int affectedRows = ps.executeUpdate();
@@ -62,7 +62,7 @@ public class SachDAO {
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, sach.getTenSach());
             ps.setString(2, sach.getTacGia());
-            ps.setDate(3, sach.getNamXuatBan());
+            ps.setInt(3, sach.getNamXuatBan());
             ps.setString(4, sach.getTheLoai());
             ps.setInt(5, sach.getSoLuong());
             ps.setInt(6, sach.getMaSach());
@@ -102,7 +102,7 @@ public class SachDAO {
                         rs.getInt("MaSach"),
                         rs.getString("TenSach"),
                         rs.getString("TacGia"),
-                        rs.getDate("NamXuatBan"),
+                        rs.getInt("NamXuatBan"),
                         rs.getString("TheLoai"),
                         rs.getInt("SoLuong")
                     );

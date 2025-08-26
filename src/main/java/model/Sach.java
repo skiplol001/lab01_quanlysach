@@ -6,14 +6,14 @@ public class Sach {
     private int maSach;
     private String tenSach;
     private String tacGia;
-    private Date namXuatBan;
+    private int namXuatBan;
     private String theLoai;
     private int soLuong;
 
     public Sach() {
     }
 
-    public Sach(String tenSach, String tacGia, Date namXuatBan, String theLoai, int soLuong) {
+    public Sach(String tenSach, String tacGia, int namXuatBan, String theLoai, int soLuong) {
         this.tenSach = tenSach;
         this.tacGia = tacGia;
         this.namXuatBan = namXuatBan;
@@ -21,7 +21,7 @@ public class Sach {
         this.soLuong = soLuong;
     }
 
-    public Sach(int maSach, String tenSach, String tacGia, Date namXuatBan, String theLoai, int soLuong) {
+    public Sach(int maSach, String tenSach, String tacGia, int namXuatBan, String theLoai, int soLuong) {
         this.maSach = maSach;
         this.tenSach = tenSach;
         this.tacGia = tacGia;
@@ -54,11 +54,11 @@ public class Sach {
         this.tacGia = tacGia;
     }
 
-    public Date getNamXuatBan() {
+    public int getNamXuatBan() {
         return namXuatBan;
     }
 
-    public void setNamXuatBan(Date namXuatBan) {
+    public void setNamXuatBan(int namXuatBan) {
         this.namXuatBan = namXuatBan;
     }
 
